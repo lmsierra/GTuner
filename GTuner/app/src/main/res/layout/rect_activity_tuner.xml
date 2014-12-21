@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -148,8 +148,8 @@
         android:layout_alignTop="@+id/nota"
         android:layout_marginTop="115dp"
         android:layout_marginRight="-22dp"
-        android:src="@drawable/indicador_d_2"
+        android:src="@drawable/indicador_d_1"
         android:visibility="gone"
         />
 
-</LinearLayout>
+</RelativeLayout>

@@ -65,8 +65,6 @@ public class TunerActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 
-        Log.e("ACTIVITY CREADA", "ACTIVITY CREADA");
-
         prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
         notacion = prefs.getBoolean("notacion", false);
@@ -125,7 +123,7 @@ public class TunerActivity extends Activity {
 
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("notacion", notacion);
-        edit.commit();
+        edit.apply();
 
         getNotation(notacion, sostenidos);
 
@@ -212,21 +210,20 @@ public class TunerActivity extends Activity {
             AudioProcessor p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
             dispatcher.addAudioProcessor(p);
             thread = new Thread(dispatcher, "Audio Dispatcher");
-            thread.start();
+         //   thread.start();
         }
     }
 
 
     private String getNota(float pitch){
 
-        Log.e("GETNOTA", "GETNOTA");
 
         float frecuenciaLA = 440;
 
         double value = (12*(Math.log10(pitch/frecuenciaLA)/Math.log10(2)) + 57) + 0.5;
 
         int notaDetectada = (int)value;
-        Log.e("VALOR", "" + value);
+
         return notas[notaDetectada%12];
     }
 
@@ -238,10 +235,6 @@ public class TunerActivity extends Activity {
     protected void onPause() {
         super.onPause();
 
-        if(thread != null){
-            thread.interrupt();
-            thread = null;
-        }
-
+        Log.e("OnPause", "OnPause");
     }
 }
