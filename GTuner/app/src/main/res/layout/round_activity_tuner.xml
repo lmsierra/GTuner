@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TunerActivity"
+    tools:deviceIds="wear_round">
+
+    <TextView
+
+        android:id="@+id/nota"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/round_background"
+
+        android:text="@string/empty"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:gravity="center"
+
+        android:clickable="true"
+        android:longClickable="true"
+        android:onClick="changeNotation"
+        />
+
+
+    <!-- Indicadores izquierdos-->
+
+    <ImageView
+        android:id="@+id/indicador_izquierda_5"
+        android:layout_width="43dp"
+        android:layout_height="25dp"
+        android:layout_alignLeft="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="-15dp"
+        android:layout_marginLeft="35dp"
+        android:src="@drawable/indicador_i_5"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/indicador_izquierda_4"
+        android:layout_width="37dp"
+        android:layout_height="35dp"
+        android:layout_alignLeft="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="-5dp"
+        android:layout_marginLeft="-3dp"
+        android:src="@drawable/indicador_i_4"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/indicador_izquierda_3"
+        android:layout_width="27dp"
+        android:layout_height="39dp"
+        android:layout_alignLeft="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="33dp"
+        android:layout_marginLeft="-15dp"
+        android:src="@drawable/indicador_i_3"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/indicador_izquierda_2"
+        android:layout_width="24dp"
+        android:layout_height="43dp"
+        android:layout_alignLeft="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="72dp"
+        android:layout_marginLeft="-15dp"
+        android:src="@drawable/indicador_i_2"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/indicador_izquierda_1"
+        android:layout_width="80dp"
+        android:layout_height="45dp"
+        android:layout_alignLeft="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="115dp"
+        android:layout_marginLeft="-22dp"
+        android:src="@drawable/indicador_i_1"
+        android:visibility="gone"
+        />
+
+
+
+    <!-- Indicadores derechos -->
+
+    <ImageView
+        android:id="@+id/indicador_derecha_5"
+        android:layout_width="43dp"
+        android:layout_height="25dp"
+        android:layout_alignRight="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="-15dp"
+        android:layout_marginRight="37dp"
+        android:src="@drawable/indicador_d_5"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/indicador_derecha_4"
+        android:layout_width="37dp"
+        android:layout_height="35dp"
+        android:layout_alignRight="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="-5dp"
+        android:layout_marginRight="-2dp"
+        android:src="@drawable/indicador_d_4"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/indicador_derecha_3"
+        android:layout_width="27dp"
+        android:layout_height="39dp"
+        android:layout_alignRight="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="33dp"
+        android:layout_marginRight="-14dp"
+        android:src="@drawable/indicador_d_3"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/indicador_derecha_2"
+        android:layout_width="24dp"
+        android:layout_height="43dp"
+        android:layout_alignRight="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="72dp"
+        android:layout_marginRight="-14dp"
+        android:src="@drawable/indicador_d_2"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/indicador_derecha_1"
+        android:layout_width="80dp"
+        android:layout_height="45dp"
+        android:layout_alignRight="@+id/nota"
+        android:layout_alignTop="@+id/nota"
+        android:layout_marginTop="115dp"
+        android:layout_marginRight="-22dp"
+        android:src="@drawable/indicador_d_2"
+        android:visibility="gone"
+        />
+</RelativeLayout>

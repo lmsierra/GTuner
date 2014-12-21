@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GTuner</string>
+    <string name="hello_round">Hello Round World!</string>
+    <string name="hello_square">Hello Square World!</string>
+    <string name="empty"> - </string>
+
+    <string-array name="array_notacion_europea_sostenido">
+        <item> Do </item>
+        <item> Do #</item>
+        <item> Re </item>
+        <item> Re #</item>
+        <item> Mi </item>
+        <item> Fa </item>
+        <item> Fa #</item>
+        <item> Sol </item>
+        <item> Sol #</item>
+        <item> La </item>
+        <item> La #</item>
+        <item> Si </item>
+    </string-array>
+
+
+    <string-array name="array_notacion_europea_bemol">
+        <item> Do </item>
+        <item> Re b</item>
+        <item> Re </item>
+        <item> Mi b</item>
+        <item> Mi </item>
+        <item> Fa </item>
+        <item> Sol b</item>
+        <item> Sol</item>
+        <item> La b</item>
+        <item> La </item>
+        <item> Si b</item>
+        <item> Do b</item>
+    </string-array>
+
+
+    <string-array name="array_notacion_americana_sostenido">
+        <item> C </item>
+        <item> C #</item>
+        <item> D </item>
+        <item> D #</item>
+        <item> E </item>
+        <item> F </item>
+        <item> F #</item>
+        <item> G </item>
+        <item> G #</item>
+        <item> A </item>
+        <item> A #</item>
+        <item> B </item>
+    </string-array>
+
+
+    <string-array name="array_notacion_americana_bemol">
+        <item> C  </item>
+        <item> D b</item>
+        <item> D  </item>
+        <item> E b</item>
+        <item> E  </item>
+        <item> F  </item>
+        <item> G b</item>
+        <item> G  </item>
+        <item> A b</item>
+        <item> A  </item>
+        <item> B b</item>
+        <item> B  </item>
+    </string-array>
+
+</resources>
