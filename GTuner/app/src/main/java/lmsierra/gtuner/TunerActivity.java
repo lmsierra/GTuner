@@ -57,6 +57,7 @@ public class TunerActivity extends Activity {
     private int count = 0;
 
     private Thread thread;
+    private AudioRecord audioInputStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +166,7 @@ public class TunerActivity extends Activity {
 
     private void listenToMicrophone() {
 
-        AudioRecord audioInputStream = new AudioRecord(
+        audioInputStream = new AudioRecord(
                 MediaRecorder.AudioSource.MIC, 22050,
                 android.media.AudioFormat.CHANNEL_IN_MONO,
                 android.media.AudioFormat.ENCODING_PCM_16BIT,
@@ -188,7 +189,7 @@ public class TunerActivity extends Activity {
                         @Override
                         public void run() {
 
-                            if(frecuenciaAnterior == pitchInHz) {
+                            if(frecuenciaAnterior > pitchInHz - 10 && frecuenciaAnterior < pitchInHz + 10) {
 
                                 if (pitchInHz < 0) {
 
@@ -210,7 +211,8 @@ public class TunerActivity extends Activity {
             AudioProcessor p = new PitchProcessor(PitchProcessor.PitchEstimationAlgorithm.FFT_YIN, 22050, 1024, pdh);
             dispatcher.addAudioProcessor(p);
             thread = new Thread(dispatcher, "Audio Dispatcher");
-         //   thread.start();
+            thread.start();
+
         }
     }
 
@@ -235,6 +237,12 @@ public class TunerActivity extends Activity {
     protected void onPause() {
         super.onPause();
 
-        Log.e("OnPause", "OnPause");
+        if(thread != null){
+            thread.interrupt();
+            thread = null;
+        }
+
+        audioInputStream.stop();
+        audioInputStream.release();
     }
 }
