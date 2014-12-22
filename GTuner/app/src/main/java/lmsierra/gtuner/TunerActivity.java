@@ -25,6 +25,7 @@ import be.tarsos.dsp.pitch.PitchProcessor;
 
 public class TunerActivity extends Activity {
 
+    public static final int NUM_ARRAYS_FRECUENCY = 6;
 
     private TextView textNota;
 
@@ -39,6 +40,8 @@ public class TunerActivity extends Activity {
     private ImageView left_indicator_3;
     private ImageView left_indicator_4;
     private ImageView left_indicator_5;
+
+    private String [] [] frecuenciesTab;
 
     private boolean notacion;
 
@@ -73,8 +76,9 @@ public class TunerActivity extends Activity {
 
         getNotation(notacion, sostenidos);
 
-        stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
+        initializeFrecuenciesTab();
 
+        stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
 
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
 
@@ -111,6 +115,17 @@ public class TunerActivity extends Activity {
                 listenToMicrophone();
             }
         });
+    }
+
+
+    private void initializeFrecuenciesTab(){
+        frecuenciesTab = new String[6][12];
+        frecuenciesTab [0] = getResources().getStringArray(R.array.octava_2);
+        frecuenciesTab [1] = getResources().getStringArray(R.array.octava_1);
+        frecuenciesTab [2] = getResources().getStringArray(R.array.octava0);
+        frecuenciesTab [3] = getResources().getStringArray(R.array.octava1);
+        frecuenciesTab [4] = getResources().getStringArray(R.array.octava2);
+        frecuenciesTab [5] = getResources().getStringArray(R.array.octava3);
     }
 
     public void changeNotation(View v){
@@ -189,15 +204,129 @@ public class TunerActivity extends Activity {
                         @Override
                         public void run() {
 
+
                             if(frecuenciaAnterior > pitchInHz - 10 && frecuenciaAnterior < pitchInHz + 10) {
+                                count++;
 
-                                if (pitchInHz < 0) {
+                                if (count > 2) {
+                                    if (pitchInHz < 0) {
 
-                                    clearText();
+                                        clearText();
+                                        clearLeftIndicators();
+                                        clearRightIndicators();
+                                        
+                                    } else {
 
-                                } else {
-                                    textNota.setText(getNota(pitchInHz));
+                                        int nota = getNota(pitchInHz);
+
+                                        textNota.setText(notas[getNota(pitchInHz) % 12]);
+
+                                        float previousFrecuency;
+                                        float nextFrecuency;
+                                        float perfectFrecuency;
+
+                                        Log.e("ANTES DE BUCLE", "ANTES DEL BUCLE");
+
+                                        for (int i = 0; i < NUM_ARRAYS_FRECUENCY; i++) {
+                                            Log.e("LOOP I: ", String.valueOf(i));
+                                            previousFrecuency = Float.parseFloat(frecuenciesTab[i][(nota - 1) % 12]);
+                                            perfectFrecuency = Float.parseFloat(frecuenciesTab[i][nota%12]);
+                                            nextFrecuency = Float.parseFloat(frecuenciesTab[i][(nota + 1) % 12]);
+
+                                            if (pitchInHz > previousFrecuency && pitchInHz < nextFrecuency) {
+
+                                                Log.e("DENTRO DE AQUI", "DENTRO DE AQUI");
+                                                float distance;
+
+                                                if (pitchInHz > perfectFrecuency) {
+                                                    Log.e("POR LA DERECHA", "POR LA DERECHA");
+
+                                                    distance = (nextFrecuency - perfectFrecuency) / 6;
+
+                                                    clearLeftIndicators();
+
+                                                    if (pitchInHz > nextFrecuency - distance) {
+                                                        right_indicator_1.setVisibility(View.VISIBLE);
+                                                        right_indicator_2.setVisibility(View.GONE);
+                                                        right_indicator_3.setVisibility(View.GONE);
+                                                        right_indicator_4.setVisibility(View.GONE);
+                                                        right_indicator_5.setVisibility(View.GONE);
+                                                    }else if(pitchInHz > nextFrecuency - 2*distance){
+                                                        right_indicator_1.setVisibility(View.VISIBLE);
+                                                        right_indicator_2.setVisibility(View.VISIBLE);
+                                                        right_indicator_3.setVisibility(View.GONE);
+                                                        right_indicator_4.setVisibility(View.GONE);
+                                                        right_indicator_5.setVisibility(View.GONE);
+                                                    }else if(pitchInHz > nextFrecuency - 3*distance){
+                                                        right_indicator_1.setVisibility(View.VISIBLE);
+                                                        right_indicator_2.setVisibility(View.VISIBLE);
+                                                        right_indicator_3.setVisibility(View.VISIBLE);
+                                                        right_indicator_4.setVisibility(View.GONE);
+                                                        right_indicator_5.setVisibility(View.GONE);
+                                                    }else if(pitchInHz > nextFrecuency - 4*distance){
+                                                        right_indicator_1.setVisibility(View.VISIBLE);
+                                                        right_indicator_2.setVisibility(View.VISIBLE);
+                                                        right_indicator_3.setVisibility(View.VISIBLE);
+                                                        right_indicator_4.setVisibility(View.VISIBLE);
+                                                        right_indicator_5.setVisibility(View.GONE);
+                                                    }else if(pitchInHz > nextFrecuency - 5*distance){
+                                                        right_indicator_1.setVisibility(View.VISIBLE);
+                                                        right_indicator_2.setVisibility(View.VISIBLE);
+                                                        right_indicator_3.setVisibility(View.VISIBLE);
+                                                        right_indicator_4.setVisibility(View.VISIBLE);
+                                                        right_indicator_5.setVisibility(View.VISIBLE);
+                                                    }else {
+                                                        textNota.setBackground(getDrawable(R.drawable.round_background_green));
+                                                    }
+
+                                                }else{
+                                                    Log.e("POR LA IZQUIERDA", "POR LA IZQUIERDA");
+
+                                                    distance = (perfectFrecuency - previousFrecuency) / 6;
+
+                                                    clearRightIndicators();
+
+                                                    if(pitchInHz > previousFrecuency + distance){
+                                                        left_indicator_1.setVisibility(View.VISIBLE);
+                                                        left_indicator_2.setVisibility(View.GONE);
+                                                        left_indicator_3.setVisibility(View.GONE);
+                                                        left_indicator_4.setVisibility(View.GONE);
+                                                        left_indicator_5.setVisibility(View.GONE);
+                                                    }else if(pitchInHz > previousFrecuency + 2*distance){
+                                                        left_indicator_1.setVisibility(View.VISIBLE);
+                                                        left_indicator_2.setVisibility(View.VISIBLE);
+                                                        left_indicator_3.setVisibility(View.GONE);
+                                                        left_indicator_4.setVisibility(View.GONE);
+                                                        left_indicator_5.setVisibility(View.GONE);
+                                                    }else if(pitchInHz > previousFrecuency + 3*distance){
+                                                        left_indicator_1.setVisibility(View.VISIBLE);
+                                                        left_indicator_2.setVisibility(View.VISIBLE);
+                                                        left_indicator_3.setVisibility(View.VISIBLE);
+                                                        left_indicator_4.setVisibility(View.GONE);
+                                                        left_indicator_5.setVisibility(View.GONE);
+                                                    }else if(pitchInHz > previousFrecuency + 4*distance){
+                                                        left_indicator_1.setVisibility(View.VISIBLE);
+                                                        left_indicator_2.setVisibility(View.VISIBLE);
+                                                        left_indicator_3.setVisibility(View.VISIBLE);
+                                                        left_indicator_4.setVisibility(View.VISIBLE);
+                                                        left_indicator_5.setVisibility(View.GONE);
+                                                    }else if(pitchInHz > previousFrecuency + 5*distance){
+                                                        left_indicator_1.setVisibility(View.VISIBLE);
+                                                        left_indicator_2.setVisibility(View.VISIBLE);
+                                                        left_indicator_3.setVisibility(View.VISIBLE);
+                                                        left_indicator_4.setVisibility(View.VISIBLE);
+                                                        left_indicator_5.setVisibility(View.VISIBLE);
+                                                    }else{
+                                                        textNota.setBackground(getDrawable(R.drawable.round_background_green));
+                                                    }
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
+                            }else{
+                                count = 0;
                             }
 
                             Log.e("FRECUENCY", "" + pitchInHz);
@@ -212,12 +341,27 @@ public class TunerActivity extends Activity {
             dispatcher.addAudioProcessor(p);
             thread = new Thread(dispatcher, "Audio Dispatcher");
             thread.start();
-
         }
     }
 
 
-    private String getNota(float pitch){
+    private void clearLeftIndicators(){
+        left_indicator_1.setVisibility(View.GONE);
+        left_indicator_2.setVisibility(View.GONE);
+        left_indicator_3.setVisibility(View.GONE);
+        left_indicator_4.setVisibility(View.GONE);
+        left_indicator_5.setVisibility(View.GONE);
+    }
+
+    private void clearRightIndicators(){
+        right_indicator_1.setVisibility(View.GONE);
+        right_indicator_2.setVisibility(View.GONE);
+        right_indicator_3.setVisibility(View.GONE);
+        right_indicator_4.setVisibility(View.GONE);
+        right_indicator_5.setVisibility(View.GONE);
+    }
+
+    private int getNota(float pitch){
 
 
         float frecuenciaLA = 440;
@@ -226,7 +370,7 @@ public class TunerActivity extends Activity {
 
         int notaDetectada = (int)value;
 
-        return notas[notaDetectada%12];
+        return notaDetectada;
     }
 
     private void clearText(){
