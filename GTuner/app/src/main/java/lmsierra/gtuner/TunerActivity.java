@@ -48,6 +48,7 @@ public class TunerActivity extends Activity {
 
     private boolean notacion;
     private boolean sostenidos;
+    private boolean recording = false;
 
     private WatchViewStub stub;
 
@@ -213,6 +214,8 @@ public class TunerActivity extends Activity {
 
         TarsosDSPAudioInputStream audioStream = new AndroidAudioInputStream(audioInputStream, format);
         audioInputStream.startRecording();
+        recording = true;
+
         AudioDispatcher dispatcher = new AudioDispatcher(audioStream, 1024, 0);
 
         if (dispatcher != null) {
@@ -456,9 +459,10 @@ public class TunerActivity extends Activity {
             thread = null;
         }
 
-        if(audioInputStream != null) {
+        if(audioInputStream != null && recording) {
             audioInputStream.stop();
             audioInputStream.release();
+            recording = false;
         }
     }
 }

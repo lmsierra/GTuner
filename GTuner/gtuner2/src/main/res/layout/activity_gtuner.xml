@@ -61,7 +61,7 @@
             android:layout_marginLeft="-45dp"
             android:layout_centerVertical="true"
             android:background="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -72,7 +72,7 @@
             android:layout_alignTop="@+id/nota"
             android:layout_marginLeft="-90dp"
             android:src="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -86,7 +86,7 @@
             android:layout_centerVertical="true"
 
             android:src="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -96,7 +96,7 @@
             android:layout_alignLeft="@+id/nota"
             android:layout_marginLeft="-152dp"
             android:src="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -106,7 +106,7 @@
             android:layout_alignLeft="@+id/nota"
             android:layout_marginLeft="-174dp"
             android:src="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
 
@@ -121,7 +121,7 @@
             android:layout_marginRight="-45dp"
             android:layout_centerVertical="true"
             android:background="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -131,7 +131,7 @@
             android:layout_alignRight="@+id/nota"
             android:layout_marginRight="-90dp"
             android:src="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -144,7 +144,7 @@
             android:layout_centerVertical="true"
 
             android:src="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -154,7 +154,7 @@
             android:layout_alignRight="@+id/nota"
             android:layout_marginRight="-152dp"
             android:src="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <ImageView
@@ -164,7 +164,7 @@
             android:layout_alignRight="@+id/nota"
             android:layout_marginRight="-174dp"
             android:src="@drawable/indicador"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
     </RelativeLayout>
@@ -175,6 +175,7 @@
         android:layout_height="50dp"
         android:layout_gravity="center|bottom"
         ads:adUnitId="@string/AD_UNIT_ID"
-        ads:adSize="BANNER"/>
+        ads:adSize="BANNER"
+        android:visibility="gone"/>
 </LinearLayout>
 

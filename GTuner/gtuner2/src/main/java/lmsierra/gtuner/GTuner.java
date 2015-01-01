@@ -72,7 +72,7 @@ public class GTuner extends ActionBarActivity {
         prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
         adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("TEST_DEVICE_ID").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
         notacion = prefs.getBoolean("notacion", false);
@@ -460,7 +460,7 @@ public class GTuner extends ActionBarActivity {
             thread = null;
         }
 
-        if(audioInputStream != null && recording == true) {
+        if(audioInputStream != null && recording) {
             audioInputStream.stop();
             audioInputStream.release();
             recording = false;
