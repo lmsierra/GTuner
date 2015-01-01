@@ -1,16 +1,17 @@
 package lmsierra.gtuner;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.support.wearable.view.WatchViewStub;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
@@ -22,13 +23,17 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 
-public class TunerActivity extends Activity {
+
+public class GTuner extends ActionBarActivity {
 
     public static final int NUM_ARRAYS_FREQUENCY = 8;
     public static final int NUM_NOTES = 12;
     public static final float INITIAL_FREQUENCY = 4.0899982f;
 
     private TextView textNota;
+    private TextView textFreq;
+
+    private AdView adView;
 
     private ImageView right_indicator_1;
     private ImageView right_indicator_2;
@@ -48,8 +53,7 @@ public class TunerActivity extends Activity {
 
     private boolean notacion;
     private boolean sostenidos;
-
-    private WatchViewStub stub;
+    private boolean recording = false;
 
     private SharedPreferences prefs;
 
@@ -63,11 +67,13 @@ public class TunerActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tuner);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+        setContentView(R.layout.activity_gtuner);
 
         prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+
+        adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("TEST_DEVICE_ID").build();
+        adView.loadAd(adRequest);
 
         notacion = prefs.getBoolean("notacion", false);
         sostenidos = prefs.getBoolean("sostenidos_bemoles", false);
@@ -76,41 +82,34 @@ public class TunerActivity extends Activity {
 
         initializeFrecuenciesTab();
 
-        stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
+        textNota = (TextView) findViewById(R.id.nota);
+        textFreq = (TextView) findViewById(R.id.freq);
+
+        textNota.setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
-            public void onLayoutInflated(WatchViewStub stub) {
+            public boolean onLongClick(View v) {
 
-                textNota = (TextView) stub.findViewById(R.id.nota);
-
-                textNota.setOnLongClickListener(new View.OnLongClickListener() {
-
-                    @Override
-                    public boolean onLongClick(View v) {
-
-                        changeBemol_Sostenido();
-                        return true;
-                    }
-                });
-
-                right_indicator_1 = (ImageView) stub.findViewById(R.id.indicador_derecha_1);
-                right_indicator_2 = (ImageView) stub.findViewById(R.id.indicador_derecha_2);
-                right_indicator_3 = (ImageView) stub.findViewById(R.id.indicador_derecha_3);
-                right_indicator_4 = (ImageView) stub.findViewById(R.id.indicador_derecha_4);
-                right_indicator_5 = (ImageView) stub.findViewById(R.id.indicador_derecha_5);
-
-                left_indicator_1 = (ImageView) stub.findViewById(R.id.indicador_izquierda_1);
-                left_indicator_2 = (ImageView) stub.findViewById(R.id.indicador_izquierda_2);
-                left_indicator_3 = (ImageView) stub.findViewById(R.id.indicador_izquierda_3);
-                left_indicator_4 = (ImageView) stub.findViewById(R.id.indicador_izquierda_4);
-                left_indicator_5 = (ImageView) stub.findViewById(R.id.indicador_izquierda_5);
-
-                textNota.setText(getResources().getString(R.string.empty));
-
-                listenToMicrophone();
+                changeBemol_Sostenido();
+                return true;
             }
         });
+
+        right_indicator_1 = (ImageView) findViewById(R.id.indicador_derecha_1);
+        right_indicator_2 = (ImageView) findViewById(R.id.indicador_derecha_2);
+        right_indicator_3 = (ImageView) findViewById(R.id.indicador_derecha_3);
+        right_indicator_4 = (ImageView) findViewById(R.id.indicador_derecha_4);
+        right_indicator_5 = (ImageView) findViewById(R.id.indicador_derecha_5);
+
+        left_indicator_1 = (ImageView) findViewById(R.id.indicador_izquierda_1);
+        left_indicator_2 = (ImageView) findViewById(R.id.indicador_izquierda_2);
+        left_indicator_3 = (ImageView) findViewById(R.id.indicador_izquierda_3);
+        left_indicator_4 = (ImageView) findViewById(R.id.indicador_izquierda_4);
+        left_indicator_5 = (ImageView) findViewById(R.id.indicador_izquierda_5);
+
+        textNota.setText(getResources().getString(R.string.empty));
+
+        listenToMicrophone();
     }
 
     /*
@@ -213,6 +212,8 @@ public class TunerActivity extends Activity {
 
         TarsosDSPAudioInputStream audioStream = new AndroidAudioInputStream(audioInputStream, format);
         audioInputStream.startRecording();
+        recording = true;
+
         AudioDispatcher dispatcher = new AudioDispatcher(audioStream, 1024, 0);
 
         if (dispatcher != null) {
@@ -236,7 +237,7 @@ public class TunerActivity extends Activity {
                                         clearText();
                                         clearLeftIndicators();
                                         clearRightIndicators();
-                                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                                     } else {
 
@@ -270,6 +271,7 @@ public class TunerActivity extends Activity {
         float perfectFrequency = 0;
 
         textNota.setText(notas[getNota(pitchInHz) % 12]);
+        textFreq.setText("" + (String.format("%.02f", pitchInHz)) + " Hz");
 
         for (int i = 0; i < NUM_ARRAYS_FREQUENCY; i++) {
 
@@ -311,7 +313,7 @@ public class TunerActivity extends Activity {
                         right_indicator_3.setVisibility(View.GONE);
                         right_indicator_4.setVisibility(View.GONE);
                         right_indicator_5.setVisibility(View.GONE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else if(pitchInHz > top - 2*interval){
                         right_indicator_1.setVisibility(View.VISIBLE);
@@ -319,7 +321,7 @@ public class TunerActivity extends Activity {
                         right_indicator_3.setVisibility(View.GONE);
                         right_indicator_4.setVisibility(View.GONE);
                         right_indicator_5.setVisibility(View.GONE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else if(pitchInHz > top - 3*interval) {
                         right_indicator_1.setVisibility(View.VISIBLE);
@@ -327,7 +329,7 @@ public class TunerActivity extends Activity {
                         right_indicator_3.setVisibility(View.VISIBLE);
                         right_indicator_4.setVisibility(View.GONE);
                         right_indicator_5.setVisibility(View.GONE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else if(pitchInHz > top - 4*interval){
                         right_indicator_1.setVisibility(View.VISIBLE);
@@ -335,7 +337,7 @@ public class TunerActivity extends Activity {
                         right_indicator_3.setVisibility(View.VISIBLE);
                         right_indicator_4.setVisibility(View.VISIBLE);
                         right_indicator_5.setVisibility(View.GONE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else if (pitchInHz > top - 4*interval) {
                         right_indicator_1.setVisibility(View.VISIBLE);
@@ -343,10 +345,10 @@ public class TunerActivity extends Activity {
                         right_indicator_3.setVisibility(View.VISIBLE);
                         right_indicator_4.setVisibility(View.VISIBLE);
                         right_indicator_5.setVisibility(View.VISIBLE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else {
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background_green));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background_green));
                         clearLeftIndicators();
                         clearRightIndicators();
                     }
@@ -366,7 +368,7 @@ public class TunerActivity extends Activity {
                         left_indicator_3.setVisibility(View.VISIBLE);
                         left_indicator_4.setVisibility(View.VISIBLE);
                         left_indicator_5.setVisibility(View.VISIBLE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else if(pitchInHz > bottom + 4*interval){
                         left_indicator_1.setVisibility(View.VISIBLE);
@@ -374,7 +376,7 @@ public class TunerActivity extends Activity {
                         left_indicator_3.setVisibility(View.VISIBLE);
                         left_indicator_4.setVisibility(View.VISIBLE);
                         left_indicator_5.setVisibility(View.GONE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else if(pitchInHz > bottom + 3*interval){
                         left_indicator_1.setVisibility(View.VISIBLE);
@@ -382,7 +384,7 @@ public class TunerActivity extends Activity {
                         left_indicator_3.setVisibility(View.VISIBLE);
                         left_indicator_4.setVisibility(View.GONE);
                         left_indicator_5.setVisibility(View.GONE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else if(pitchInHz > bottom + 2*interval){
                         left_indicator_1.setVisibility(View.VISIBLE);
@@ -390,7 +392,7 @@ public class TunerActivity extends Activity {
                         left_indicator_3.setVisibility(View.GONE);
                         left_indicator_4.setVisibility(View.GONE);
                         left_indicator_5.setVisibility(View.GONE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
 
                     }else if(pitchInHz > bottom + interval){
                         left_indicator_1.setVisibility(View.VISIBLE);
@@ -398,15 +400,15 @@ public class TunerActivity extends Activity {
                         left_indicator_3.setVisibility(View.GONE);
                         left_indicator_4.setVisibility(View.GONE);
                         left_indicator_5.setVisibility(View.GONE);
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background));
                     }else{
-                        textNota.setBackground(getResources().getDrawable(R.drawable.round_background_green));
+                        textNota.setBackground(getResources().getDrawable(R.drawable.nota_background_green));
                         clearLeftIndicators();
                         clearRightIndicators();
                     }
                 }else{
 
-                    textNota.setBackground(getResources().getDrawable(R.drawable.round_background_green));
+                    textNota.setBackground(getResources().getDrawable(R.drawable.nota_background_green));
                     clearLeftIndicators();
                     clearRightIndicators();
                 }
@@ -438,12 +440,14 @@ public class TunerActivity extends Activity {
         float frecuenciaLA = 440;
 
         double value = (12*(Math.log10(pitch/frecuenciaLA)/Math.log10(2)) + 57) + 0.5;
+        int notaDetectada = (int)value;
 
-        return (int)value;
+        return notaDetectada;
     }
 
     private void clearText(){
         textNota.setText(getResources().getString(R.string.empty));
+        textFreq.setText("");
     }
 
     @Override
@@ -456,9 +460,26 @@ public class TunerActivity extends Activity {
             thread = null;
         }
 
-        if(audioInputStream != null) {
+        if(audioInputStream != null && recording == true) {
             audioInputStream.stop();
             audioInputStream.release();
+            recording = false;
         }
+
+        if (adView != null) {
+            adView.pause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adView.resume();
+    }
+
+    @Override
+    public void onDestroy() {
+        adView.destroy();
+        super.onDestroy();
     }
 }

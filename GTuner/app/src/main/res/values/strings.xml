@@ -5,6 +5,9 @@
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
     <string name="empty"> - </string>
+    <string name="infoCardTitle">Info</string>
+    <string name="InfoCardContent">Press inside circle to change between European (La) or American notation (A).\n
+                                   Hold pressed to change notation between # and b </string>
 
     <string-array name="array_notacion_europea_sostenido">
         <item> Do </item>
@@ -34,9 +37,8 @@
         <item> La b</item>
         <item> La </item>
         <item> Si b</item>
-        <item> Do b</item>
+        <item> Si</item>
     </string-array>
-
 
     <string-array name="array_notacion_americana_sostenido">
         <item> C </item>
@@ -53,7 +55,6 @@
         <item> B </item>
     </string-array>
 
-
     <string-array name="array_notacion_americana_bemol">
         <item> C  </item>
         <item> D b</item>
@@ -67,97 +68,6 @@
         <item> A  </item>
         <item> B b</item>
         <item> B  </item>
-    </string-array>
-
-
-    <string-array name="octava_2">
-        <item> 8.18  </item>
-        <item> 8.66  </item>
-        <item> 9.18  </item>
-        <item> 9.72  </item>
-        <item> 10.30 </item>
-        <item> 10.91 </item>
-        <item> 11.56 </item>
-        <item> 12.25 </item>
-        <item> 12.98 </item>
-        <item> 13.75 </item>
-        <item> 14.57 </item>
-        <item> 15.43 </item>
-    </string-array>
-
-    <string-array name="octava_1">
-        <item> 16.35 </item>
-        <item> 17.32 </item>
-        <item> 18.35 </item>
-        <item> 19.45 </item>
-        <item> 20.60 </item>
-        <item> 21.83 </item>
-        <item> 23.12 </item>
-        <item> 24.50 </item>
-        <item> 25.96 </item>
-        <item> 27.50 </item>
-        <item> 29.14 </item>
-        <item> 30.87 </item>
-    </string-array>
-
-    <string-array name="octava0">
-        <item> 32.70 </item>
-        <item> 34.65 </item>
-        <item> 36.71 </item>
-        <item> 38.89 </item>
-        <item> 41.20 </item>
-        <item> 43.65 </item>
-        <item> 46.25 </item>
-        <item> 49.00 </item>
-        <item> 51.91 </item>
-        <item> 55.00 </item>
-        <item> 58.27 </item>
-        <item> 61.74 </item>
-    </string-array>
-
-    <string-array name="octava1">
-        <item> 65.41  </item>
-        <item> 69.30  </item>
-        <item> 73.42  </item>
-        <item> 77.78  </item>
-        <item> 82.41  </item>
-        <item> 87.31  </item>
-        <item> 92.50  </item>
-        <item> 98.00  </item>
-        <item> 103.83 </item>
-        <item> 110.00 </item>
-        <item> 116.54 </item>
-        <item> 123.47 </item>
-    </string-array>
-
-    <string-array name="octava2">
-        <item> 130.81 </item>
-        <item> 138.59 </item>
-        <item> 146.83 </item>
-        <item> 155.56 </item>
-        <item> 164.81 </item>
-        <item> 174.61 </item>
-        <item> 185.00 </item>
-        <item> 196.00 </item>
-        <item> 207.65 </item>
-        <item> 220.00 </item>
-        <item> 233.08 </item>
-        <item> 246.94 </item>
-    </string-array>
-
-    <string-array name="octava3">
-        <item> 261.63 </item>
-        <item> 277.18 </item>
-        <item> 293.66 </item>
-        <item> 311.13 </item>
-        <item> 329.63 </item>
-        <item> 349.23 </item>
-        <item> 369.99 </item>
-        <item> 392.00 </item>
-        <item> 415.30 </item>
-        <item> 440.00 </item>
-        <item> 466.16 </item>
-        <item> 493.88 </item>
     </string-array>
 
 </resources>
